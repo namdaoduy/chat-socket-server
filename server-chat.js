@@ -59,6 +59,6 @@ app.get('/', function(req, res){
   res.send('<h1>Omae wa mou shindeiru!</h1>');
 });
 
-http.listen(3002, function(){
-  console.log('listening on *:3002');
+http.listen(3006, function(){
+  console.log('listening on *:3006');
 });
