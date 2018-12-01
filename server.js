@@ -10,6 +10,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(logger('dev'));
 
+let curr_uid = 1;
 let users = [];
 let messages = [];
 
@@ -29,6 +30,7 @@ io.on('connection', (socket) => {
         message: 'Username existed'
       })
     }
+    obj.uid = curr_uid++;
     users.push(obj);
     io.to(socket.id).emit('signup', {
       message: 'OK'
@@ -36,10 +38,12 @@ io.on('connection', (socket) => {
   })
 
   socket.on('login', obj => {
-    if (users.findIndex(x => x.username === obj.username && x.password === obj.password) >= 0) {
+    let user = users.find(x => x.username === obj.username && x.password === obj.password);
+    if (user) {
       return io.to(socket.id).emit('login', {
         message: 'OK',
-        username: obj.username,
+        username: user.username,
+        uid: user.uid,
         old_messages: messages
       })
     }
